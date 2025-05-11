@@ -1,0 +1,120 @@
+import nltk
+nltk.download('brown')
+nltk.download('inaugural')
+nltk.download('reuters')
+nltk.download('udhr')
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('universal_tagset')
+nltk.download('tagsets')
+nltk.download('treebank')
+nltk.download('words')
+
+from nltk.corpus import brown, inaugural, reuters, udhr
+
+print("BROWN Corpus:")
+print("Categories:", brown.categories())
+print("Words:", brown.words(categories='news')[:10])
+print("Sents:", brown.sents(categories='news')[:2])
+#where each sentence is a list of word tokens.
+
+print("\nINAUGURAL Corpus:")
+print("File IDs:", inaugural.fileids()[:5])
+print("Words:", inaugural.words('2009-Obama.txt')[:10])
+
+print("\nREUTERS Corpus:")
+print("Categories:", reuters.categories()[:5])
+print("Words:", reuters.words(categories='crude')[:10])
+print("Sents:", reuters.sents(categories='crude')[:2])
+    
+print("\nUDHR Corpus:")
+print("Languages:", udhr.fileids()[:5])
+print("Words (English):", udhr.words('English-Latin1')[:10])
+
+#Create and use your own corpora (plaintext, categorical)
+from nltk.corpus import PlaintextCorpusReader
+
+# Plaintext Corpus
+corpus_root = 'my_corpus'# creates directory
+import os
+os.makedirs(corpus_root, exist_ok=True)
+with open(os.path.join(corpus_root, 'sample.txt'), 'w') as f:
+    f.write("This is a custom corpus file. It can be used for testing.")
+custom_corpus = PlaintextCorpusReader(corpus_root, '.*\.txt')
+print("\nCustom Corpus Words:", custom_corpus.words())
+
+#Study Conditional frequency distributions
+import nltk
+nltk.download('brown') 
+from nltk.corpus import brown
+from nltk import ConditionalFreqDist
+# Conditional Frequency Distribution
+word_category_pairs = [
+ (word.lower(), cat) # Create (word, category) pairs
+ for cat in brown.categories() # Loop through each category (e.g., 'news', 'romance', 'fiction'...)
+ for word in brown.words(categories=cat) # Loop through each word in that category
+]
+cfd = ConditionalFreqDist(word_category_pairs)
+print("\nCFD Example (word 'news'):", cfd['news'].most_common(3))
+
+#Study of tagged corpora with methods like tagged_sents, tagged_words
+from nltk.corpus import treebank
+print("\nTagged Sents:", treebank.tagged_sents()[:2])
+print("Tagged Words:", treebank.tagged_words()[:10])
+
+#Write a program to find the most frequent noun tags
+from collections import Counter
+tags = [tag for (word, tag) in treebank.tagged_words()]
+tag_freq = Counter(tags)
+print("\nMost Frequent POS Tags:", tag_freq.most_common(5))
+# Noun Tags
+noun_tags = [tag for tag in tags if tag.startswith('NN')]
+noun_freq = Counter(noun_tags)
+print("\nMost Frequent NOUN Tags:", noun_freq.most_common(3))
+
+#Map Words to Properties Using Python Dictionaries
+word_properties = {
+ 'cat': {'type': 'animal', 'sound': 'meow'},
+ 'car': {'type': 'vehicle', 'fuel': 'petrol'},
+ 'apple': {'type': 'fruit', 'color': 'red'}
+}
+print("\nWord Properties:")
+for word, props in word_properties.items():
+    print(f"{word.title()} ->{props}")
+
+#Study Rule based tagger, Unigram Tagger.
+from nltk.tag import DefaultTagger, UnigramTagger
+from nltk.corpus import treebank
+default_tagger = DefaultTagger('NN')
+print("\nDefaultTagger Test:", default_tagger.tag(['Hello', 'world']))
+train_data = treebank.tagged_sents()[:3000]
+test_data = treebank.tagged_sents()[3000:]
+unigram_tagger = UnigramTagger(train_data, backoff=default_tagger)
+print("UnigramTagger Accuracy:", unigram_tagger.evaluate(test_data))
+
+#Find different words from a given plain text without any space by comparing this text with a given corpus of words.
+from nltk.corpus import words
+nltk.download('words')
+wordlist= set(words.words())
+def segment_filtered(text, min_len=2):
+    results = []
+    def helper(text, sentence):
+        if not text:
+            results.append(sentence)
+            return
+        for i in range(1, len(text)+1):
+            word = text[:i]
+            if len(word) >= min_len and word in wordlist:
+                helper(text[i:], sentence + [word])
+    helper(text, [])
+    return results
+
+#Also find the score of words
+results = segment_filtered("themanrantosave", min_len=2)
+def score_by_fewest_words(segmented_list):
+    return[(words,len(words))for words in segmented_list]
+scored = score_by_fewest_words(results)
+scored.sort(key=lambda x: x[1])
+print("\nFiltered & Scored Segmentations:")
+for words, score in scored:
+    print(" →", " ".join(words), "| Word Count:", score)
