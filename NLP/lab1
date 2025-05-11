@@ -1,1 +1,28 @@
+import nltk
+import re
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
 
+nltk.download('punkt_tab')
+nltk.download('stopwords')
+
+text="Pythomn is amazing language.NLP is fun"
+print("Original Text:\n",text)
+
+tokens=word_tokenize(text)
+print("\n Step1-Tokenization:\n",tokens)
+
+filtered_tokens=[word for word in tokens if word.isalpha()]
+print("\n Filter:\n",filtered_tokens)
+
+valid_tokens=[word for word in filtered_tokens if re.match(r"^[a-zA-Z]+$",word)]
+print("\n Script validation:\n",valid_tokens)
+
+stop_words=set(stopwords.words('english'))
+meaningful_words=[word.lower() for word in valid_tokens if word.lower() not in stop_words]
+print("\n Stop word removal",meaningful_words)
+
+stemmer=PorterStemmer()
+stemmed_words=[stemmer.stem(word) for word in meaningful_words]
+print("\n Stemming:\n",stemmed_words)
