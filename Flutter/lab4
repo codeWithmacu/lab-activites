@@ -1,43 +1,75 @@
 import 'package:flutter/material.dart';
- 
-void main() =>
-		runApp(MaterialApp(home: LoginScreen(), debugShowCheckedModeBanner: false));
- 
-class LoginScreen extends StatelessWidget {
-	final username = TextEditingController(), password = TextEditingController();
-	LoginScreen({super.key});
-	void login(BuildContext context) {
-		final msg = (username.text == 'admin' && password.text == '1234')
-			? 'Login Successful' : 'Invalid Credentials';
-		ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+
+void main() {
+	runApp(
+		MaterialApp(
+			home: TodoApp(),
+			debugShowCheckedModeBanner: false
+		)
+	);
+}
+
+class TodoApp extends StatefulWidget {
+	@override
+	_TodoAppState createState() => _TodoAppState();
+}
+
+class _TodoAppState extends State<TodoApp> {
+	final List<String> tasks = [];
+	final TextEditingController taskController = TextEditingController();
+
+	void addTask() {
+		if (taskController.text.isNotEmpty) {
+			setState(() {
+				tasks.add(taskController.text);
+			});
+			taskController.clear();
+		}
 	}
- 
+
+	void removeTask(int index) {
+		setState(() {
+			tasks.removeAt(index);
+		});
+	}
+
+	// This widget is the root of your application.
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
-			appBar: AppBar(title: Text('Login')),
+			appBar: AppBar(title: Text('To-Do List')),
 			body: Padding(
-				padding: EdgeInsets.all(20),
+				padding: EdgeInsets.all(16.0),
 				child: Column(
-					mainAxisAlignment: MainAxisAlignment.center,
 					children: [
 						TextField(
-							controller: username,
-							decoration: InputDecoration(labelText: 'Username'),
+							controller: taskController,
+							decoration: InputDecoration(
+								labelText: 'Enter Task',
+								border: OutlineInputBorder()
+							),
 						),
-						TextField(
-							controller: password,
-							obscureText: true,
-							decoration: InputDecoration(labelText: 'password'),
-						),
-						SizedBox(height: 20),
-						ElevatedButton(
-							onPressed: () => login(context),
-							child: Text('Login'),
+						SizedBox(height: 10),
+						ElevatedButton(onPressed: addTask, child: Text('Add Task')),
+						Expanded(
+							child: ListView.builder(
+								itemCount: tasks.length,
+								itemBuilder: (context, index) {
+									return Card(
+										child: ListTile(
+											title: Text(tasks[index]),
+											trailing: IconButton(
+												icon: Icon(Icons.delete, color: Colors.red),
+												onPressed: () => removeTask(index),
+											),
+										),
+									);
+								},
+							),
 						),
 					],
 				),
-			),
+			)
 		);
 	}
 }
