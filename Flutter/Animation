@@ -34,3 +34,8 @@ class _RotatingLogoState extends State<RotatingLogo>
   @override
   void dispose() => _controller.dispose();
 }
+
+
+pubsec
+assets
+- path
