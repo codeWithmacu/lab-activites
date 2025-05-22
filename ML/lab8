@@ -10,7 +10,7 @@ from IPython.display import Image
 import pydotplus
 import warnings
 warnings.filterwarnings('ignore')
-data=pd.read_csv('/content/titanic.csv')
+data=pd.read_csv('/content/titanic.csv') // data=sns.load_dataset("titanic")
 pd.set_option('display.max_columns',None)
 data.head()
 data.Survived.unique()
