@@ -65,15 +65,3 @@ sns.heatmap (corr_matrix, annot = True, cmap = 'coolwarm', fmt = '.2f')
 plt.title ("Feature correlation heatmap")
 plt.show ()
 
-df = sns.load_dataset ('iris')
-df
-
-print (
-	"\nBasic Information about dataset:", df.info (),
-	"\nSummary Statistics:", df.describe (),
-	"\nMissing values in each column", df.isnull ().sum ()
-)
-
-df.columns
-columns_remove = ['sepal_length', 'species']
-df = df.drop (columns = columns_remove)
