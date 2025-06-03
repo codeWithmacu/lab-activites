@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: StopWatch(),
-  ));
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: StopWatch()));
 }
 
 class StopWatch extends StatefulWidget {
@@ -23,7 +20,9 @@ class _StopWatchState extends State<StopWatch> {
     if (!_stopwatch.isRunning) {
       _stopwatch.start();
       _timer = Timer.periodic(
-          Duration(milliseconds: 50), (timer) => setState(() {}));
+        Duration(milliseconds: 50),
+        (timer) => setState(() {}),
+      );
     }
   }
 
@@ -48,9 +47,7 @@ class _StopWatchState extends State<StopWatch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Stopwatch'),
-      ),
+      appBar: AppBar(title: Text('Stopwatch')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -59,32 +56,24 @@ class _StopWatchState extends State<StopWatch> {
               _formattedTime(),
               style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
-              height: 30,
-            ),
+            SizedBox(height: 30),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                for (var btn in ["Start", "Stop", "Reset"])
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: ElevatedButton(
-                      onPressed: btn == "Start"
-                          ? _startStopwatch
-                          : btn == "Stop"
-                              ? _stopStopwatch
-                              : _resetStopwatch,
-                      child: Text(btn),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            btn == "Start" ? Colors.green : Colors.blue,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      ),
-                    ),
-                  )
+                ElevatedButton(
+                  onPressed: () => _startStopwatch(),
+                  child: Text("Start", style: TextStyle(color: Colors.green)),
+                ),
+                ElevatedButton(
+                  onPressed: () => _stopStopwatch(),
+                  child: Text("Stop", style: TextStyle(color: Colors.red)),
+                ),
+                ElevatedButton(
+                  onPressed: () => _resetStopwatch(),
+                  child: Text("Reset", style: TextStyle(color: Colors.blue)),
+                ),
               ],
-            )
+            ),
           ],
         ),
       ),
