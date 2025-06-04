@@ -23,7 +23,7 @@ for i in Numerical:
 		f'\nStandard Deviation : ', Data[i].std (),
 		f'\nVariance : ', Data[i].var (),
 		f'\nRange : ', Data[i].max () - Data[i].min (),
-		sep=' ', end='\n\n'
+		\n'
 	)
 
 Data.isnull ().sum ()
