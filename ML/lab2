@@ -41,6 +41,7 @@ plt.show ()
 num_col = df.select_dtypes (include = [np.number]).columns.tolist ()
 cat_col = df.select_dtypes (include = ['object']).columns
 print (f"\nNumerical_data: {num_col}")
+print (f"\nCategorical_data: {cat_col}")
 
 plt.figure (figsize = (8, 6))
 sns.scatterplot (x = df['age'], y = df['fare'])
